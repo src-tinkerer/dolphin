@@ -13,8 +13,10 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <mutex>
 
 #include "Common/CommonTypes.h"
+#include "VideoCommon/FrameDumpFFMpeg.h"
 
 struct BootParameters;
 struct WindowSystemInfo;
@@ -22,6 +24,14 @@ struct WindowSystemInfo;
 namespace Core
 {
 class System;
+
+struct FrameCommon {
+  std::mutex frameLock;
+  FrameData frameData;
+  bool isUpdated;
+};
+
+FrameCommon& GetFrameCommon();
 
 bool GetIsThrottlerTempDisabled();
 void SetIsThrottlerTempDisabled(bool disable);

@@ -168,6 +168,12 @@ void FrameUpdateOnCPUThread()
     NetPlay::NetPlayClient::SendTimeBase();
 }
 
+FrameCommon& GetFrameCommon()
+{
+  static FrameCommon frameCommon;
+  return frameCommon;
+}
+
 void OnFrameEnd()
 {
 #ifdef USE_MEMORYWATCHER
@@ -179,6 +185,12 @@ void OnFrameEnd()
     s_memory_watcher->Step(guard);
   }
 #endif
+  std::lock_guard<std::mutex> f_lk(Core::GetFrameCommon().frameLock);
+  if(Core::GetFrameCommon().isUpdated) {
+    auto frame = Core::GetFrameCommon().frameData;
+    API::GetEventHub().EmitEvent(API::Events::FrameDrawn{frame.width, frame.height, frame.data});
+    Core::GetFrameCommon().isUpdated = false;
+  }
 }
 
 void OnFrameBegin()
