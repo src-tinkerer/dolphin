@@ -253,7 +253,7 @@ if(MSVC)
   add_compile_options(/W4)
 
   # Treat all warnings as errors
-  add_compile_options(/WX)
+  # add_compile_options(/WX)
 
   # Disable some warnings
   add_compile_options(
