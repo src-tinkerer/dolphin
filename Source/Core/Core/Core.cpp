@@ -258,6 +258,7 @@ bool WantsDeterminism()
 // BootManager.cpp
 bool Init(Core::System& system, std::unique_ptr<BootParameters> boot, const WindowSystemInfo& wsi)
 {
+  Core::GetFrameCommon().isUpdated = false;
   if (s_emu_thread.joinable())
   {
     if (!IsUninitialized(system))
